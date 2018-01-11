@@ -27,6 +27,8 @@ class Bot:
             potential spouse.
         """
 
+        #hallo
+
         # All legal moves
         moves = state.moves()
 
