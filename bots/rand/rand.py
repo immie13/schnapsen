@@ -28,6 +28,7 @@ class Bot:
         """
 
         #hallo
+        #hey
 
         # All legal moves
         moves = state.moves()
