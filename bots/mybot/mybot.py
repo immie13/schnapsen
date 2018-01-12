@@ -26,12 +26,10 @@ class Bot:
             indicating a move; the first indicates the card played in the trick, the second a
             potential spouse.
         """
-
+        
 
         # All legal moves
         moves = state.moves()
 
 
-        # print state.get_deck().get_card_states()
-        # Return a random choice
-        return random.choice(moves)
+        # hier moeten we nu onze eigen strategy fixen
