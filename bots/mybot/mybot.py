@@ -5,6 +5,7 @@ uniformly at random.
 
 # Import the API objects
 from api import State
+from api import Deck
 import random
 
 
@@ -31,6 +32,7 @@ class Bot:
         # All legal moves
         moves = state.moves()
         chosen_move = moves[0]
+        moves_trump_suit = []
 
         # If the opponent has played a card
         if state.get_opponents_played_card() is not None:
