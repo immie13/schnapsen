@@ -62,4 +62,5 @@ class Bot:
 			if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
 				chosen_move = move
 
+
 		return chosen_move
