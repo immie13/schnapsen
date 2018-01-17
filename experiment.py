@@ -43,7 +43,8 @@ class Bot:
 
 
         #IMPLEMENT: Make a random move (but exclude the best non-trump move from above)
-        moves.remove(move)
+        if len(moves) > 1:
+            moves.remove(move)
         return random.choice(moves)
 
 
