@@ -81,5 +81,16 @@ def load_player(name, classname='Bot'):
 
 def ratio_points(state, player):
 	if state.get_points(player) + state.get_points(other(player)) != 0:
+
 		return state.get_points(player) / float((state.get_points(player) + state.get_points(other(player))))
 	return 0
+
+
+def ratio_all_points(state, player):
+
+    full_points_player = state.get_points(player) + state.get_pending_points(player)
+    full_point_opponent = state.get_points(other(player)) + state.get_pending_points(other(player))
+
+    if state.get_points(player) + state.get_points(other(player)) != 0:
+        return full_points_player / float(full_points_player + full_point_opponent)
+    return 0

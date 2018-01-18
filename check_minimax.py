@@ -47,5 +47,5 @@ for r in range(REPEATS):
         print('Agreed.')
 
 print('Done. time Minimax: {}, time Alphabeta: {}.'.format(mm_time/REPEATS, ab_time/REPEATS))
-print('Alphabeta speedup: {} '.format(mm_time/ab_time))
+# print('Alphabeta speedup: {} '.format(mm_time/ab_time))
 
