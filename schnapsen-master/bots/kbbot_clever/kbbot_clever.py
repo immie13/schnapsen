@@ -21,7 +21,6 @@ class Bot:
     def get_move(self, state):
 
         moves = state.moves()
-
         random.shuffle(moves)
 
         for move in moves:
@@ -32,12 +31,23 @@ class Bot:
                 # Uncomment the next line if you want to see that something happens.
                 # print "Strategy Applied"
 
-                print "Card played:"
+                print "Card played (trump):"
+                print util.get_card_name(move[0])
+                return move
+
+            if not self.kb_consistent_trumpten(state, move):
+                print "Card played (trump):"
+                print util.get_card_name(move[0])
+                print move
+                return move
+
+            if not self.kb_consistent_ten(state, move):
+                print "Card played (non-trump):"
                 print util.get_card_name(move[0])
                 return move
 
             if not self.kb_consistent_jack(state, move):
-                print "Card played:"
+                print "Card played (non-trump/trump):"
                 print util.get_card_name(move[0])
                 return move
 
@@ -46,62 +56,6 @@ class Bot:
 
     # Note: In this example, the state object is not used,
     # but you might want to do it for your own strategy.
-    def kb_consistent_trumpwedding(self, state, move):
-    # type: (State, move) -> bool
-
-        # each time we check for consistency we initialise a new knowledge-base
-        kb = KB()
-
-        # Add general information about the game
-
-        suit = State.get_trump_suit(state)
-        if suit == "c":
-            kb.add_clause(Boolean("tq3"))
-            kb.add_clause(Boolean("tk2"))
-        elif suit == "d":
-            kb.add_clause(Boolean("tq8"))
-            kb.add_clause(Boolean("tk7"))
-        elif suit == "h":
-            kb.add_clause(Boolean("tq13"))
-            kb.add_clause(Boolean("tk12"))
-        elif suit == "s":
-            kb.add_clause(Boolean("tq18"))
-            kb.add_clause(Boolean("tk17"))
-
-        load_clever.general_information(kb)
-
-        # Add the necessary knowledge about the strategy
-        load_clever.strategy_knowledge(kb)
-
-        # This line stores the index of the card in the deck.
-        # If this doesn't make sense, refer to _deck.py for the card index mapping
-        index = move[0]
-        index2 = move[1]
-
-        # This creates the string which is used to make the strategy_variable.
-        # Note that as far as kb.py is concerned, two objects created with the same
-        # string in the constructor are equivalent, and are seen as the same symbol.
-        # Here we use "pj" to indicate that the card with index "index" should be played with the
-        # PlayJack heuristics that was defined in class. Initialise a different variable if 
-        # you want to apply a different strategy (that you will have to define in load.py)
-        variable_string = "ptw" + str(index)
-        strategy_variable = Boolean(variable_string)
-
-        # Add the relevant clause to the loaded knowledge base
-        kb.add_clause(~strategy_variable)
-
-        # If the knowledge base is not satisfiable, the strategy variable is
-        # entailed (proof by refutation)
-
-        if move[1] != None:
-            suit = State.get_trump_suit(state)
-            print suit
-            print "Move to check out:"
-            print move
-            print kb.satisfiable()
-
-        return kb.satisfiable()
-
 
     def kb_consistent_trumpace(self, state, move):
     # type: (State, move) -> bool
@@ -112,14 +66,27 @@ class Bot:
         # Add general information about the game
 
         suit = State.get_trump_suit(state)
-        if suit == "c":
-            kb.add_clause(Boolean("ta0"))
-        elif suit == "d":
-            kb.add_clause(Boolean("ta5"))
-        elif suit == "h":
-            kb.add_clause(Boolean("ta10"))
-        elif suit == "s":
-            kb.add_clause(Boolean("ta15"))
+
+        if suit == "C":
+            index = 0
+            variable_string = "ta" + str(index)
+            strategy_variable = Boolean(variable_string)
+            kb.add_clause(strategy_variable)
+        elif suit == "D":
+            index = 5
+            variable_string = "ta" + str(index)
+            strategy_variable = Boolean(variable_string)
+            kb.add_clause(strategy_variable)
+        elif suit == "H":
+            index = 10
+            variable_string = "ta" + str(index)
+            strategy_variable = Boolean(variable_string)
+            kb.add_clause(strategy_variable)
+        elif suit == "S":
+            index = 15
+            variable_string = "ta" + str(index)
+            strategy_variable = Boolean(variable_string)
+            kb.add_clause(strategy_variable)
 
         load_clever.general_information(kb)
 
@@ -139,6 +106,89 @@ class Bot:
         # If the knowledge base is not satisfiable, the strategy variable is
         # entailed (proof by refutation)
 
+        return kb.satisfiable()
+
+    def kb_consistent_trumpten(self, state, move):
+    # type: (State, move) -> bool
+
+        # each time we check for consistency we initialise a new knowledge-base
+        kb = KB()
+
+        # Add general information about the game
+
+        suit = State.get_trump_suit(state)
+
+        if suit == "C":
+            index = 1
+            variable_string = "tt" + str(index)
+            strategy_variable = Boolean(variable_string)
+            kb.add_clause(strategy_variable)
+        elif suit == "D":
+            index = 6
+            variable_string = "tt" + str(index)
+            strategy_variable = Boolean(variable_string)
+            kb.add_clause(strategy_variable)
+        elif suit == "H":
+            index = 11
+            variable_string = "tt" + str(index)
+            strategy_variable = Boolean(variable_string)
+            kb.add_clause(strategy_variable)
+        elif suit == "S":
+            index = 16
+            variable_string = "tt" + str(index)
+            strategy_variable = Boolean(variable_string)
+            kb.add_clause(strategy_variable)
+
+        load_clever.general_information(kb)
+
+        # Add the necessary knowledge about the strategy
+        load_clever.strategy_knowledge(kb)
+
+        # This line stores the index of the card in the deck.
+        # If this doesn't make sense, refer to _deck.py for the card index mapping
+        index = move[0]
+
+        variable_string = "ptt" + str(index)
+        strategy_variable = Boolean(variable_string)
+
+        # Add the relevant clause to the loaded knowledge base
+        kb.add_clause(~strategy_variable)
+
+        # If the knowledge base is not satisfiable, the strategy variable is
+        # entailed (proof by refutation)
+
+        return kb.satisfiable()
+
+    def kb_consistent_ten(self, state, move):
+    # type: (State, move) -> bool
+
+        # each time we check for consistency we initialise a new knowledge-base
+        kb = KB()
+
+        # Add general information about the game
+        load_clever.general_information(kb)
+
+        # Add the necessary knowledge about the strategy
+        load_clever.strategy_knowledge(kb)
+
+        # This line stores the index of the card in the deck.
+        # If this doesn't make sense, refer to _deck.py for the card index mapping
+        index = move[0]
+
+        # This creates the string which is used to make the strategy_variable.
+        # Note that as far as kb.py is concerned, two objects created with the same
+        # string in the constructor are equivalent, and are seen as the same symbol.
+        # Here we use "pj" to indicate that the card with index "index" should be played with the
+        # PlayJack heuristics that was defined in class. Initialise a different variable if
+        # you want to apply a different strategy (that you will have to define in load.py)
+        variable_string = "pt" + str(index)
+        strategy_variable = Boolean(variable_string)
+
+        # Add the relevant clause to the loaded knowledge base
+        kb.add_clause(~strategy_variable)
+
+        # If the knowledge base is not satisfiable, the strategy variable is
+        # entailed (proof by refutation)
         return kb.satisfiable()
 
     def kb_consistent_jack(self, state, move):

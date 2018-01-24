@@ -35,7 +35,7 @@ class Bot:
                 #index = move[0]
 
                 print "   Is the strategy applied? Card played:"
-                print util.get_card_name(move[0])
+                print tab util.get_card_name(move[0])
                 return move
 
         # If no move that is entailed by the kb is found, play random move
