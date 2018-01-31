@@ -12,7 +12,7 @@ from sklearn.externals import joblib
 
 # Path of the model we will use. If you make a model
 # with a different name, point this line to its path.
-DEFAULT_MODEL = os.path.dirname(os.path.realpath(__file__)) + '/model_ml_rand.pkl'
+DEFAULT_MODEL = os.path.dirname(os.path.realpath(__file__)) + '/model_ml_improved_rand.pkl'
 
 class Bot:
 
@@ -135,6 +135,18 @@ def features(state):
    # Add plauer 2's pending points to feature set
    p2_pending_points = state.get_pending_points(2)
    feature_set.append(p2_pending_points)
+
+   # Add player 1's total points to feature set
+   p1_points = state.get_points(1)
+   p1_pending_points = state.get_pending_points(1)
+   p1_total_points = p1_points + p1_pending_points
+   feature_set.append(p1_total_points)
+
+   # Add player 2's total points to feature set
+   p2_points = state.get_points(2)
+   p2_pending_points = state.get_pending_points(2)
+   p2_total_points = p2_points + p2_pending_points
+   feature_set.append(p2_total_points)
 
    # Get trump suit
    trump_suit = state.get_trump_suit()

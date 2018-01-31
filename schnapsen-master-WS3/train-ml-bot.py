@@ -14,10 +14,10 @@ import sklearn.linear_model
 from sklearn.externals import joblib
 
 
-from bots.ml.ml import features
-from bots.ml import ml
-#from bots.rand import rand
-#from bots.rdeep import rdeep
+from bots.ml_improved.ml_improved import features
+#from bots.ml import ml
+from bots.rand import rand
+from bots.rdeep import rdeep
 
 
 # How many games to play
@@ -27,9 +27,9 @@ GAMES = 1000
 PHASE = 1
 
 # The player we'll observe
-player = ml.Bot()
-#player = rand.Bot()
-#player = rdeep.Bot()
+#player = ml.Bot()
+player1 = rand.Bot()
+player2 = rdeep.Bot()
 
 data = []
 target = []
@@ -50,7 +50,11 @@ for g in range(GAMES):
         state_vectors.append(features(given_state))
 
         # Advance to the next state
-        move = player.get_move(given_state)
+        if state.get_phase() == 1:
+            move = player1.get_move(given_state)
+        else:
+            move = player2.get_move(given_state)
+
         state = state.next(move)
 
     winner, score = state.winner()
@@ -86,6 +90,6 @@ for str in target:
 print('instances per class: {}'.format(count))
 
 # Store the model in the ml directory
-joblib.dump(model, './bots/ml_ml/model_ml_ml.pkl')
+joblib.dump(model, './bots/ml_improved/model_ml_improved_rand.pkl')
 
 print('Done')
