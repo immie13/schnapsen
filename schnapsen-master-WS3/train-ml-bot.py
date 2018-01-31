@@ -15,11 +15,12 @@ from sklearn.externals import joblib
 
 
 
-from bots_project.ml_alphabeta_rdeep.ml_alphabeta_rdeep import features
+from bots_project.ml_rdeep_rdeep.ml_rdeep_rdeep import features
 #from bots.ml import ml
 #from bots.rand import rand
 from bots.rdeep import rdeep
-from bots.alphabeta import alphabeta
+#from bots.alphabeta import alphabeta
+#from bots.bully import bully
 
 
 # How many games to play
@@ -30,8 +31,8 @@ PHASE = 1
 
 # The player we'll observe
 #player = ml.Bot()
-player1 = alphabeta.Bot()
-player2 = rdeep.Bot()
+player = rdeep.Bot()
+#player2 = alphabeta.Bot()
 
 data = []
 target = []
@@ -52,10 +53,11 @@ for g in range(GAMES):
         state_vectors.append(features(given_state))
 
         # Advance to the next state
-        if state.get_phase() == 1:
-            move = player1.get_move(given_state)
-        else:
-            move = player2.get_move(given_state)
+        # if state.get_phase() == 1:
+        #     move = player1.get_move(given_state)
+        # else:
+        #     move = player2.get_move(given_state)
+        move = player.get_move(given_state)
 
         state = state.next(move)
 
@@ -92,6 +94,6 @@ for str in target:
 print('instances per class: {}'.format(count))
 
 # Store the model in the ml directory
-joblib.dump(model, './bots_project/ml_alphabeta_rdeep/model_ml_alphabeta_rdeep.pkl')
+joblib.dump(model, './bots_project/ml_rdeep_rdeep/model_ml_rdeep_rdeep.pkl')
 
 print('Done')
