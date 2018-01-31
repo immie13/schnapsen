@@ -14,21 +14,23 @@ import sklearn.linear_model
 from sklearn.externals import joblib
 
 
-from bots.ml_improved.ml_improved import features
+
+from bots_project.ml_alphabeta_rdeep.ml_alphabeta_rdeep import features
 #from bots.ml import ml
-from bots.rand import rand
+#from bots.rand import rand
 from bots.rdeep import rdeep
+from bots.alphabeta import alphabeta
 
 
 # How many games to play
-GAMES = 1000
+GAMES = 10000
 
 # Which phase the game starts in
 PHASE = 1
 
 # The player we'll observe
 #player = ml.Bot()
-player1 = rand.Bot()
+player1 = alphabeta.Bot()
 player2 = rdeep.Bot()
 
 data = []
@@ -90,6 +92,6 @@ for str in target:
 print('instances per class: {}'.format(count))
 
 # Store the model in the ml directory
-joblib.dump(model, './bots/ml_improved/model_ml_improved_rand.pkl')
+joblib.dump(model, './bots_project/ml_alphabeta_rdeep/model_ml_alphabeta_rdeep.pkl')
 
 print('Done')

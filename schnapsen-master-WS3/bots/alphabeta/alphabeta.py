@@ -12,14 +12,14 @@ class Bot:
     __max_depth = -1
     __randomize = True
 
-    def __init__(self, randomize=True, depth=8):
+    def __init__(self, randomize=True, depth=6):
         self.__randomize = randomize
         self.__max_depth = depth
 
     def get_move(self, state):
         val, move = self.value(state)
 
-        return move
+        return move # to do nothing, return None
 
     def value(self, state, alpha=float('-inf'), beta=float('inf'), depth = 0):
         """
@@ -30,10 +30,8 @@ class Bot:
         :param int depth: How deep we are in the tree
         :return val, move: the value of the state, and the best move.
         """
-
         if state.finished():
-            winner, points = state.winner()
-            return (points, None) if winner == 1 else (-points, None)
+            return (1.0, None) if state.winner() == 1 else (-1.0, None)
 
         if depth == self.__max_depth:
             return heuristic(state)
@@ -49,7 +47,7 @@ class Bot:
         for move in moves:
 
             next_state = state.next(move)
-            value, _ = ???
+            value, m = self.value(next_state, alpha, beta, depth=depth+1)
 
             if maximizing(state):
                 if value > best_value:
@@ -64,13 +62,13 @@ class Bot:
 
             # Prune the search tree
             # We know this state will never be chosen, so we stop evaluating its children
-            if ???:
-                break
+            if maximizing(state):
+                if alpha >= beta:
+                    break
 
         return best_value, best_move
 
 def maximizing(state):
-    # type: (State) -> bool
     """
     Whether we're the maximizing player (1) or the minimizing player (2).
 
@@ -87,4 +85,4 @@ def heuristic(state):
     :param state:
     :return: A heuristic evaluation for the given state (between -1.0 and 1.0)
     """
-    return util.ratio_points(state, 1) * 2.0 - 1.0, None
+    return util.ratio_all_points(state, 1) * 2.0 - 1.0, None
